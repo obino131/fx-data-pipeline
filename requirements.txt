@@ -1,0 +1,12 @@
+certifi==2026.6.17
+charset-normalizer==3.4.8
+idna==3.18
+iniconfig==2.3.0
+packaging==26.2
+pluggy==1.6.0
+psycopg2-binary==2.9.12
+Pygments==2.20.0
+pytest==9.1.1
+python-dotenv==1.2.2
+requests==2.34.2
+urllib3==2.7.0
