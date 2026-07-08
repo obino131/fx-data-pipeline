@@ -33,3 +33,6 @@ Thumbs.db
 # Jupyter (exploration only, nikdy nie jadro pipeline)
 .ipynb_checkpoints/
 *.ipynb
+
+# dbt logs (written to project root when dbt invoked from dbt/ subdirectory)
+logs/
