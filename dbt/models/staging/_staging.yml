@@ -1,0 +1,33 @@
+version: 2
+
+models:
+  - name: stg_fx_rates
+    description: "Deduplicated FX rates — one row per (base_currency, target_currency, rate_date), keeping the most recently ingested value."
+    columns:
+      - name: base_currency
+        description: "Base currency code."
+        data_tests:
+          - not_null
+
+      - name: target_currency
+        description: "Target currency code."
+        data_tests:
+          - not_null
+
+      - name: rate_date
+        description: "Date the rate applies to."
+        data_tests:
+          - not_null
+
+      - name: rate
+        description: "Exchange rate from base to target currency."
+        data_tests:
+          - not_null
+
+      - name: source
+        description: "Name of the upstream data source."
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['frankfurter']
