@@ -1,0 +1,24 @@
+version: 2
+
+sources:
+  - name: bronze
+    description: "Raw ingested data landing zone, written by Python ingestion modules."
+    schema: public
+    tables:
+      - name: bronze_fx_rates
+        description: "Raw FX rates ingested from the Frankfurter API. Append-only, may contain duplicate ingestion runs."
+        columns:
+          - name: id
+            description: "Auto-incrementing primary key."
+          - name: base_currency
+            description: "Base currency code (e.g. EUR)."
+          - name: target_currency
+            description: "Target currency code (e.g. USD)."
+          - name: rate
+            description: "Exchange rate from base to target currency."
+          - name: rate_date
+            description: "Date the rate applies to, as published by the source."
+          - name: ingested_at
+            description: "Timestamp when this row was written by the ingestion job."
+          - name: source
+            description: "Name of the upstream data source."
