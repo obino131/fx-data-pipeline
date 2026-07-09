@@ -1,0 +1,21 @@
+version: 2
+
+models:
+  - name: fct_latest_fx_rates
+    description: "Latest available FX rate per currency pair, with day-over-day change. Intended as the final reporting layer for dashboards/BI consumption."
+    columns:
+      - name: base_currency
+        data_tests:
+          - not_null
+
+      - name: target_currency
+        data_tests:
+          - not_null
+
+      - name: rate_date
+        data_tests:
+          - not_null
+
+      - name: rate
+        data_tests:
+          - not_null
