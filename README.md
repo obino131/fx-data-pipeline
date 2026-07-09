@@ -3,7 +3,7 @@
 End-to-end data engineering pipeline: live FX rates → Python ingestion (bronze layer, Postgres) → dbt transformations → Airflow orchestration → CI/CD via GitHub Actions. Fully containerized.
 
 ## Status
-🚧 Work in progress — Phase 1 complete (Python ingestion, FX API → bronze layer).
+🚧 Work in progress — Phase 2 complete (dbt: staging → intermediate → marts, 19 tests passing).
 
 ## Architecture
 _TODO — diagram and explanation coming in later phases._
@@ -16,7 +16,7 @@ _TODO — diagram and explanation coming in later phases._
 ## Roadmap
 - [x] Phase 0 — Repo, Docker, Postgres
 - [x] Phase 1 — Python ingestion (bronze)
-- [ ] Phase 2 — dbt transformations (staging/intermediate/marts)
+- [x] Phase 2 — dbt transformations (staging/intermediate/marts)
 - [ ] Phase 3 — Airflow orchestration
 - [ ] Phase 4 — CI/CD + final docs
 - [ ] Phase 5 (bonus) — PySpark + Databricks
