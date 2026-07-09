@@ -1,0 +1,21 @@
+version: 2
+
+models:
+  - name: int_fx_rate_changes
+    description: "Day-over-day FX rate changes per currency pair, computed via LAG() window function over stg_fx_rates."
+    columns:
+      - name: base_currency
+        data_tests:
+          - not_null
+
+      - name: target_currency
+        data_tests:
+          - not_null
+
+      - name: rate_date
+        data_tests:
+          - not_null
+
+      - name: rate
+        data_tests:
+          - not_null
