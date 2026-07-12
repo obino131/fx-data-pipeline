@@ -1,0 +1,22 @@
+FROM apache/airflow:3.1.2
+
+# --- dbt in an isolated virtualenv ---
+# dbt-core and apache-airflow pin conflicting versions of shared dependencies
+# (click, jinja2, pydantic). Installing dbt into a separate venv avoids
+# breaking Airflow's own Python environment.
+USER root
+RUN apt-get update && apt-get install -y --no-install-recommends python3-venv && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
+USER airflow
+RUN python3 -m venv /home/airflow/dbt_venv && \
+    /home/airflow/dbt_venv/bin/pip install --no-cache-dir \
+        dbt-core==1.11.12 \
+        dbt-postgres==1.10.2
+
+# --- ingestion module dependencies ---
+# Installed into Airflow's own environment (no conflict with these lightweight packages)
+RUN pip install --no-cache-dir \
+        requests \
+        python-dotenv \
+        psycopg2-binary
