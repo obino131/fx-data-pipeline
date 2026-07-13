@@ -1,0 +1,84 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: fx_user
+          POSTGRES_PASSWORD: changeme
+          POSTGRES_DB: fx_pipeline
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U fx_user -d fx_pipeline"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      POSTGRES_USER: fx_user
+      POSTGRES_PASSWORD: changeme
+      POSTGRES_DB: fx_pipeline
+      POSTGRES_HOST: localhost
+      POSTGRES_PORT: 5432
+      FX_BASE_CURRENCY: EUR
+      FX_TARGET_CURRENCIES: USD,GBP,CHF,JPY
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install ingestion dependencies
+        run: |
+          pip install requests python-dotenv psycopg2-binary pytest
+
+      - name: Run ingestion unit tests
+        run: |
+          pytest tests/ -v
+
+      - name: Install dbt
+        run: |
+          pip install dbt-core==1.11.12 dbt-postgres==1.10.2
+
+      - name: Write dbt profiles.yml
+        run: |
+          mkdir -p ~/.dbt
+          cat > ~/.dbt/profiles.yml << 'PROFILE'
+          fx_transform:
+            outputs:
+              dev:
+                type: postgres
+                host: localhost
+                port: 5432
+                user: fx_user
+                pass: changeme
+                dbname: fx_pipeline
+                schema: public
+                threads: 4
+            target: dev
+          PROFILE
+
+      - name: Seed bronze layer via ingestion
+        run: |
+          python -m ingestion.fetch_fx
+
+      - name: Run dbt build
+        working-directory: dbt
+        run: |
+          dbt build
